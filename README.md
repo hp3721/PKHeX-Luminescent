@@ -1,4 +1,4 @@
-PKHeX
+PKHeX-Luminescent
 =====
 <div>
   <span>English</span> / <a href=".github/README-es.md">Español</a> / <a href=".github/README-fr.md">Français</a> / <a href=".github/README-de.md">Deutsch</a>
