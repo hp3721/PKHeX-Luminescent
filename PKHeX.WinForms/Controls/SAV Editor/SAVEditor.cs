@@ -654,6 +654,7 @@ namespace PKHeX.WinForms.Controls
                 3 => new SAV_Misc3(SAV),
                 4 => new SAV_Misc4((SAV4) SAV),
                 5 => new SAV_Misc5(SAV),
+                8 when SAV is SAV8BSLuminescent bs => new SAV_Misc8bLumi(bs),
                 8 when SAV is SAV8BS bs => new SAV_Misc8b(bs),
                 _ => (Form?)null,
             };

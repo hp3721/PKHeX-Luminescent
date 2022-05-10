@@ -401,6 +401,14 @@
         BDSP,
 
         /// <summary>
+        /// Pokémon Brilliant Diamond &amp; Shining Pearl - Luminescent ROM Hack
+        /// </summary>
+        /// <remarks>Used to lump data from the associated games as data assets are shared.</remarks>
+        /// <see cref="BD"/>
+        /// <see cref="SP"/>
+        BDSPLUMI,
+
+        /// <summary>
         /// Generation 1 Games
         /// </summary>
         /// <see cref="RBY"/>

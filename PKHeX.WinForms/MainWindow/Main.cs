@@ -88,6 +88,7 @@ namespace PKHeX.WinForms
 
         public static IReadOnlyList<string> GenderSymbols { get; private set; } = GameInfo.GenderSymbolUnicode;
         public static bool HaX { get; private set; }
+        private static bool TempHaX;
 
         private readonly string[] main_langlist = Enum.GetNames(typeof(ProgramLanguage));
 
@@ -709,6 +710,12 @@ namespace PKHeX.WinForms
             {
                 WinFormsUtil.Error(MsgFileLoadSaveLoadFail, path);
                 return true;
+            } else if (sav is SAV8BSLuminescent && !HaX)
+            {
+                HaX = TempHaX = true;
+            } else if (TempHaX)
+            {
+                HaX = TempHaX = false;
             }
 
             sav.Metadata.SetExtraInfo(path);

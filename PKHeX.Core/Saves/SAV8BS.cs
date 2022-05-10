@@ -8,7 +8,7 @@ namespace PKHeX.Core
     /// <summary>
     /// Generation 8 <see cref="SaveFile"/> object for <see cref="GameVersion.BDSP"/> games.
     /// </summary>
-    public sealed class SAV8BS : SaveFile, ISaveFileRevision, ITrainerStatRecord, IEventFlagArray, IEventWorkArray<int>
+    public class SAV8BS : SaveFile, ISaveFileRevision, ITrainerStatRecord, IEventFlagArray, IEventWorkArray<int>
     {
         // Save Data Attributes
         protected internal override string ShortSummary => $"{OT} ({Version}) - {System.LastSavedTime}";
@@ -128,7 +128,7 @@ namespace PKHeX.Core
             init => WriteInt32LittleEndian(Data.AsSpan(0), value);
         }
 
-        public string SaveRevisionString => ((Gem8Version)SaveRevision).GetSuffixString();
+        public virtual string SaveRevisionString => ((Gem8Version)SaveRevision).GetSuffixString();
 
         public override IReadOnlyList<ushort> HeldItems => Legal.HeldItems_BS;
         protected override SaveFile CloneInternal() => new SAV8BS((byte[])(Data.Clone()));
