@@ -86,14 +86,14 @@ public abstract class SpriteBuilder : ISpriteBuilder<Image>
         _ => form,
     };
 
-	private static int GetLumiCustomForm(int species, int form) => species switch
-	{
-		(int)Species.Eevee or (int)Species.Mewtwo or (int)Species.Venusaur or (int)Species.Blastoise or (int)Species.Charizard or (int)Species.Onix or (int)Species.Gengar when form == 1 => 1000 - form,
-		(int)Species.Pikachu when form == 17 => 1000 - form,
-		_ => form,
-	};
+    private static int GetLumiCustomForm(int species, int form) => species switch
+    {
+        (int)Species.Eevee or (int)Species.Mewtwo or (int)Species.Venusaur or (int)Species.Blastoise or (int)Species.Charizard or (int)Species.Onix or (int)Species.Gengar when form == 1 => 1000 - form,
+        (int)Species.Pikachu when form == 17 => 1000 - form,
+        _ => form,
+    };
 
-	public Image GetSprite(int species, int form, int gender, uint formarg, int heldItem, bool isEgg, bool isShiny, int generation = -1, bool isBoxBGRed = false, bool isAltShiny = false)
+    public Image GetSprite(int species, int form, int gender, uint formarg, int heldItem, bool isEgg, bool isShiny, int generation = -1, bool isBoxBGRed = false, bool isAltShiny = false)
     {
         if (species == 0)
             return None;

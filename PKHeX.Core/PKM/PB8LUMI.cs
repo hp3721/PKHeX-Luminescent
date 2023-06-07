@@ -3,7 +3,7 @@
 /// <summary> Generation 8 <see cref="PKM"/> format. </summary>
 public sealed class PB8LUMI : PB8
 {
-	public override PersonalInfo PersonalInfo => PersonalTable.BDSPLUMI.GetFormEntry(Species, Form);
+    public override PersonalInfo PersonalInfo => PersonalTable.BDSPLUMI.GetFormEntry(Species, Form);
 
     public PB8LUMI()
     {
@@ -11,8 +11,8 @@ public sealed class PB8LUMI : PB8
         AffixedRibbon = -1; // 00 would make it show Kalos Champion :)
     }
 
-	public PB8LUMI(PB8 pk) : base((byte[])pk.Data.Clone()) { }
-	public PB8LUMI(byte[] data) : base(data) { }
+    public PB8LUMI(PB8 pk) : base((byte[])pk.Data.Clone()) { }
+    public PB8LUMI(byte[] data) : base(data) { }
     public override PKM Clone() => new PB8LUMI((byte[])Data.Clone());
 
     // Maximums

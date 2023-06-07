@@ -108,8 +108,8 @@ public static class EntityConverter
         PK4 pk4 when destType == typeof(BK4) => pk4.ConvertToBK4(),
         PB8 pb8 when destType == typeof(PB8LUMI) => pb8.ConvertToPB8LUMI(),
 
-		// Invalid
-		PK2 { Species: > Legal.MaxSpeciesID_1 } => InvalidTransfer(out result, IncompatibleSpecies),
+        // Invalid
+        PK2 { Species: > Legal.MaxSpeciesID_1 } => InvalidTransfer(out result, IncompatibleSpecies),
 
         // Sequential
         PK1 pk1 => pk1.ConvertToPK2(),

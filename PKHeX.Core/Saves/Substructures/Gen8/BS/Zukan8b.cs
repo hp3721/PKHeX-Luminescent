@@ -120,7 +120,7 @@ namespace PKHeX.Core
         // sizeof(this) = 0x30B8
 
         protected const int LANGUAGE_NONE = 0;
-		protected const int LANGUAGE_ALL = // 0x1FF
+        protected const int LANGUAGE_ALL = // 0x1FF
             1 << (int)LanguageID.Japanese - 1 |
             1 << (int)LanguageID.English  - 1 |
             1 << (int)LanguageID.French   - 1 |
@@ -164,7 +164,7 @@ namespace PKHeX.Core
             return ReadUInt32LittleEndian(SAV.Data.AsSpan(PokeDex + offset)) == 1;
         }
 
-		public virtual void SetBoolean(int index, int baseOffset, int max, bool value)
+        public virtual void SetBoolean(int index, int baseOffset, int max, bool value)
         {
             if ((uint)index > (uint)max)
                 throw new ArgumentOutOfRangeException(nameof(index));

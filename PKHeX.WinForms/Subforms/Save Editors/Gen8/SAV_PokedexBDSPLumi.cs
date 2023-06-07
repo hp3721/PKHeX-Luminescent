@@ -75,10 +75,10 @@ namespace PKHeX.WinForms
             CHK_MS.Checked = ms;
             CHK_FS.Checked = fs;
 
-			// Lang flags in 1.3.0 Lumi Revision 1 Save hasn't been changed to bitfields
-			GB_Language.Visible = (uint)species <= 493;
+            // Lang flags in 1.3.0 Lumi Revision 1 Save hasn't been changed to bitfields
+            GB_Language.Visible = (uint)species <= 493;
 
-			CHK_LangJPN.Checked = Zukan.GetLanguageFlag(species, (int)LanguageID.Japanese);
+            CHK_LangJPN.Checked = Zukan.GetLanguageFlag(species, (int)LanguageID.Japanese);
             CHK_LangENG.Checked = Zukan.GetLanguageFlag(species, (int)LanguageID.English );
             CHK_LangFRE.Checked = Zukan.GetLanguageFlag(species, (int)LanguageID.French  );
             CHK_LangITA.Checked = Zukan.GetLanguageFlag(species, (int)LanguageID.Italian );

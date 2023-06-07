@@ -713,13 +713,13 @@ namespace PKHeX.WinForms
             } else if (sav is SAV8BSLuminescent && !HaX)
             {
                 HaX = TempHaX = true;
-			}
-			else if (TempHaX)
+            }
+            else if (TempHaX)
             {
                 HaX = TempHaX = false;
-			}
+            }
 
-			sav.Metadata.SetExtraInfo(path);
+            sav.Metadata.SetExtraInfo(path);
             if (!SanityCheckSAV(ref sav))
                 return true;
 

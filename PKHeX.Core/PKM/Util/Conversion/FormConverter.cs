@@ -42,10 +42,10 @@ namespace PKHeX.Core
 
         // this is a hack; depends on currently loaded SaveFile's Game ID
         private static bool IsGG() => RecentTrainerCache.Game is (int)GameVersion.GP or (int)GameVersion.GE;
-		private static bool IsLumi() => RecentTrainerCache.LumiTrainer;
+        private static bool IsLumi() => RecentTrainerCache.LumiTrainer;
 
 
-		private static readonly string[] EMPTY = { string.Empty };
+        private static readonly string[] EMPTY = { string.Empty };
         private const string Starter = nameof(Starter);
 
         private static string[] GetFormsGen1(int species, IReadOnlyList<string> types, IReadOnlyList<string> forms, int generation)
@@ -68,27 +68,27 @@ namespace PKHeX.Core
 
                 Gengar when IsLumi() => new[]
                 {
-					types[000], // Normal
+                    types[000], // Normal
                     "Stitched"
-				},
-				Onix when IsLumi() => new[]
-				{
-					types[000], // Normal
+                },
+                Onix when IsLumi() => new[]
+                {
+                    types[000], // Normal
                     "Crystal"
-				},
-				Mewtwo when IsLumi() => new[]
-				{
-					types[000], // Normal
+                },
+                Mewtwo when IsLumi() => new[]
+                {
+                    types[000], // Normal
                     "Armored"
-				},
-				Eevee when IsLumi() => new[]
-				{
-					types[000], // Normal
+                },
+                Eevee when IsLumi() => new[]
+                {
+                    types[000], // Normal
                     "Partner"
-				},
+                },
                 Charizard or Blastoise or Venusaur when IsLumi() => GetFormsClone(types),
 
-				_ => GetFormsAlolan(generation, types, forms, species),
+                _ => GetFormsAlolan(generation, types, forms, species),
             };
         }
 
@@ -100,7 +100,7 @@ namespace PKHeX.Core
                 Slowking or Corsola when generation >= 8 => GetFormsGalar(types, forms),
                 Typhlosion or Qwilfish or Sneasel when generation >= 8 => GetFormsHisui(species, types, forms),
                 Unown => GetFormsUnown(generation),
-				_ => EMPTY,
+                _ => EMPTY,
             };
         }
 
@@ -524,11 +524,11 @@ namespace PKHeX.Core
                     forms[1063], // Partner
                 },
                 8 when IsLumi() => new[] {
-					types[000], // Normal
+                    types[000], // Normal
                     "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", "", // Placeholder for other custom forms
-					"Clone",
-				},
-				8 => new[] {
+                    "Clone",
+                },
+                8 => new[] {
                     types[000], // Normal
                     forms[813], // Original
                     forms[814], // Hoenn
@@ -729,16 +729,16 @@ namespace PKHeX.Core
             };
         }
 
-		private static string[] GetFormsClone(IReadOnlyList<string> types)
-		{
-			return new[]
-			{
-				types[000], // Normal
+        private static string[] GetFormsClone(IReadOnlyList<string> types)
+        {
+            return new[]
+            {
+                types[000], // Normal
                 "Clone",
             };
-		}
+        }
 
-		private static string[] GetFormsGalar(IReadOnlyList<string> types, IReadOnlyList<string> forms)
+        private static string[] GetFormsGalar(IReadOnlyList<string> types, IReadOnlyList<string> forms)
         {
             return new[]
             {

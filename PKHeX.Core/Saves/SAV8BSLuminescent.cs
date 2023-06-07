@@ -102,7 +102,7 @@ namespace PKHeX.Core
         public override int OTLength => 12;
         public override int NickLength => 12;
         public override int MaxMoveID => Legal.MaxMoveID_8b;
-		public override int MaxSpeciesID => (int)Species.MAX_COUNT - 1;
+        public override int MaxSpeciesID => (int)Species.MAX_COUNT - 1;
         public override int MaxItemID => 1835;
         public override int MaxBallID => Legal.MaxBallID_8b;
         public override int MaxGameID => Legal.MaxGameID_8b;
@@ -113,8 +113,8 @@ namespace PKHeX.Core
             get => ReadUInt16LittleEndian(Data) switch
             {
                 0x00 when Data.Length == SaveUtil.SIZE_G8BDSPLUMI_1 => (int)Gem8LumiVersion.V1_1, // 1.1.0-Luminescent
-				0x00 or (int)Gem8LumiVersion.V1_3 when Data.Length == SaveUtil.SIZE_G8BDSPLUMI_3 => (int)Gem8LumiVersion.V1_3, // 1.3.0-Luminescent
-				_ => (int)Gem8LumiVersion.V1_3rv1,
+                0x00 or (int)Gem8LumiVersion.V1_3 when Data.Length == SaveUtil.SIZE_G8BDSPLUMI_3 => (int)Gem8LumiVersion.V1_3, // 1.3.0-Luminescent
+                _ => (int)Gem8LumiVersion.V1_3rv1,
             };
             init => WriteUInt32LittleEndian(Data.AsSpan(0), (uint)(0xFFFF0000 | value));
         }
@@ -131,11 +131,11 @@ namespace PKHeX.Core
                 BoxLayout.LoadBattleTeams();
         }
 
-		protected override PKM GetPKM(byte[] data) => new PB8LUMI(data);
+        protected override PKM GetPKM(byte[] data) => new PB8LUMI(data);
 
-		#region Blocks
-		// public Box8 BoxInfo { get; }
-		public new FlagWork8b Work { get; }
+        #region Blocks
+        // public Box8 BoxInfo { get; }
+        public new FlagWork8b Work { get; }
         public new MyItem8b Items { get; }
         public new UndergroundItemList8b Underground { get; }
         public new SaveItemShortcut8b SelectBoundItems { get; }
@@ -173,17 +173,17 @@ namespace PKHeX.Core
         // First Savedata Expansion!
         public new RecordAddData8b RecordAdd { get; }
         public new MysteryBlock8b MysteryRecords { get; }
-		#endregion
+        #endregion
 
-		protected override void SetPKM(PKM pkm, bool isParty = false)
-		{
-			var pk = (PB8LUMI)pkm;
-			// Apply to this Save File
-			DateTime Date = DateTime.Now;
-			pk.Trade(this, Date.Day, Date.Month, Date.Year);
+        protected override void SetPKM(PKM pkm, bool isParty = false)
+        {
+            var pk = (PB8LUMI)pkm;
+            // Apply to this Save File
+            DateTime Date = DateTime.Now;
+            pk.Trade(this, Date.Day, Date.Month, Date.Year);
 
-			pkm.RefreshChecksum();
-			AddCountAcquired(pkm);
-		}
-	}
+            pkm.RefreshChecksum();
+            AddCountAcquired(pkm);
+        }
+    }
 }

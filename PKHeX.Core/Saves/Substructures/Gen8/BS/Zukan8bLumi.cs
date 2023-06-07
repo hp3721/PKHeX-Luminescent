@@ -61,14 +61,14 @@ namespace PKHeX.Core
             return OFS_STATE + (species / 2);
         }
 
-		private int GetBooleanStructOffset(int index, int baseOffset, int max)
-		{
-			if ((uint)index > (uint)Species.MAX_COUNT - 1)
-				throw new ArgumentOutOfRangeException(nameof(index));
-			return baseOffset + (index / 8);
-		}
+        private int GetBooleanStructOffset(int index, int baseOffset, int max)
+        {
+            if ((uint)index > (uint)Species.MAX_COUNT - 1)
+                throw new ArgumentOutOfRangeException(nameof(index));
+            return baseOffset + (index / 8);
+        }
 
-		private void SetNibble(ref byte bitFlag, byte bitIndex, byte nibbleValue)
+        private void SetNibble(ref byte bitFlag, byte bitIndex, byte nibbleValue)
         {
             bitFlag = (byte)(bitFlag & ~(0xF << bitIndex) | (nibbleValue << bitIndex));
         }
@@ -84,134 +84,134 @@ namespace PKHeX.Core
 
         public override bool GetBoolean(int index, int baseOffset, int max) => (SAV.Data[PokeDex + GetBooleanStructOffset(index, baseOffset, max)] >> (index % 8) & 1) == 1;
 
-		public override void SetBoolean(int index, int baseOffset, int max, bool value) => SetBit(ref SAV.Data[PokeDex + GetBooleanStructOffset(index, baseOffset, max)], (byte)(index % 8), value);
+        public override void SetBoolean(int index, int baseOffset, int max, bool value) => SetBit(ref SAV.Data[PokeDex + GetBooleanStructOffset(index, baseOffset, max)], (byte)(index % 8), value);
 
-		public override bool GetLanguageFlag(int species, int language)
-		{
-			if ((uint)species > (uint)Species.MAX_COUNT - 1)
-				throw new ArgumentOutOfRangeException(nameof(species));
-			// Lang flags in 1.3.0 Lumi Revision 1 Save hasn't been changed to bitfields
-			else if ((uint)species > Legal.MaxSpeciesID_4)
-				return false;
+        public override bool GetLanguageFlag(int species, int language)
+        {
+            if ((uint)species > (uint)Species.MAX_COUNT - 1)
+                throw new ArgumentOutOfRangeException(nameof(species));
+            // Lang flags in 1.3.0 Lumi Revision 1 Save hasn't been changed to bitfields
+            else if ((uint)species > Legal.MaxSpeciesID_4)
+                return false;
 
-			var languageBit = GetLanguageBit(language);
-			if (languageBit == -1)
-				return false;
+            var languageBit = GetLanguageBit(language);
+            if (languageBit == -1)
+                return false;
 
-			var index = species - 1;
-			var offset = OFS_LANGUAGE + (sizeof(int) * index);
-			var current = ReadInt32LittleEndian(SAV.Data.AsSpan(PokeDex + offset));
-			return (current & (1 << languageBit)) != 0;
-		}
+            var index = species - 1;
+            var offset = OFS_LANGUAGE + (sizeof(int) * index);
+            var current = ReadInt32LittleEndian(SAV.Data.AsSpan(PokeDex + offset));
+            return (current & (1 << languageBit)) != 0;
+        }
 
-		public override void SetLanguageFlag(int species, int language, bool value)
-		{
-			if ((uint)species > (uint)Species.MAX_COUNT - 1)
-				throw new ArgumentOutOfRangeException(nameof(species));
-			// Lang flags in 1.3.0 Lumi Revision 1 Save hasn't been changed to bitfields
-			else if ((uint)species > Legal.MaxSpeciesID_4)
-				return;
+        public override void SetLanguageFlag(int species, int language, bool value)
+        {
+            if ((uint)species > (uint)Species.MAX_COUNT - 1)
+                throw new ArgumentOutOfRangeException(nameof(species));
+            // Lang flags in 1.3.0 Lumi Revision 1 Save hasn't been changed to bitfields
+            else if ((uint)species > Legal.MaxSpeciesID_4)
+                return;
 
-			var languageBit = GetLanguageBit(language);
-			if (languageBit == -1)
-				return;
+            var languageBit = GetLanguageBit(language);
+            if (languageBit == -1)
+                return;
 
-			var index = species - 1;
-			var offset = OFS_LANGUAGE + (sizeof(int) * index);
-			var current = ReadInt32LittleEndian(SAV.Data.AsSpan(PokeDex + offset));
-			var mask = (1 << languageBit);
-			var update = value ? current | mask : current & ~(mask);
-			WriteInt32LittleEndian(SAV.Data.AsSpan(PokeDex + offset), update);
-		}
+            var index = species - 1;
+            var offset = OFS_LANGUAGE + (sizeof(int) * index);
+            var current = ReadInt32LittleEndian(SAV.Data.AsSpan(PokeDex + offset));
+            var mask = (1 << languageBit);
+            var update = value ? current | mask : current & ~(mask);
+            WriteInt32LittleEndian(SAV.Data.AsSpan(PokeDex + offset), update);
+        }
 
-		public override void SetLanguageFlags(int species, int value)
-		{
-			if ((uint)species > (uint)Species.MAX_COUNT - 1)
-				throw new ArgumentOutOfRangeException(nameof(species));
-			// Lang flags in 1.3.0 Lumi Revision 1 Save hasn't been changed to bitfields
-			else if ((uint)species > Legal.MaxSpeciesID_4)
-				return;
+        public override void SetLanguageFlags(int species, int value)
+        {
+            if ((uint)species > (uint)Species.MAX_COUNT - 1)
+                throw new ArgumentOutOfRangeException(nameof(species));
+            // Lang flags in 1.3.0 Lumi Revision 1 Save hasn't been changed to bitfields
+            else if ((uint)species > Legal.MaxSpeciesID_4)
+                return;
 
-			var index = species - 1;
-			var offset = OFS_LANGUAGE + (sizeof(int) * index);
-			WriteInt32LittleEndian(SAV.Data.AsSpan(PokeDex + offset), value);
-		}
+            var index = species - 1;
+            var offset = OFS_LANGUAGE + (sizeof(int) * index);
+            WriteInt32LittleEndian(SAV.Data.AsSpan(PokeDex + offset), value);
+        }
 
-		public override void CaughtAll(bool shinyToo = false)
-		{
-			var pt = Personal;
-			for (int species = 1; species <= (uint)Species.MAX_COUNT - 1; species++)
-			{
-				SetState(species, ZukanState8b.Caught);
-				var pi = pt[species];
-				var m = !pi.OnlyFemale;
-				var f = !pi.OnlyMale;
-				SetGenderFlags(species, m, f, m && shinyToo, f && shinyToo);
-				SetLanguageFlag(species, SAV.Language, true);
-			}
-		}
+        public override void CaughtAll(bool shinyToo = false)
+        {
+            var pt = Personal;
+            for (int species = 1; species <= (uint)Species.MAX_COUNT - 1; species++)
+            {
+                SetState(species, ZukanState8b.Caught);
+                var pi = pt[species];
+                var m = !pi.OnlyFemale;
+                var f = !pi.OnlyMale;
+                SetGenderFlags(species, m, f, m && shinyToo, f && shinyToo);
+                SetLanguageFlag(species, SAV.Language, true);
+            }
+        }
 
-		public override void SetAllSeen(bool value = true, bool shinyToo = false)
-		{
-			var pt = Personal;
-			for (int species = 1; species <= (uint)Species.MAX_COUNT - 1; species++)
-			{
-				if (value)
-				{
-					if (!GetSeen(species))
-						SetState(species, ZukanState8b.Seen);
-					var pi = pt[species];
-					var m = !pi.OnlyFemale;
-					var f = !pi.OnlyMale;
-					SetGenderFlags(species, m, f, m && shinyToo, f && shinyToo);
-				}
-				else
-				{
-					ClearDexEntryAll(species);
-				}
-			}
-		}
+        public override void SetAllSeen(bool value = true, bool shinyToo = false)
+        {
+            var pt = Personal;
+            for (int species = 1; species <= (uint)Species.MAX_COUNT - 1; species++)
+            {
+                if (value)
+                {
+                    if (!GetSeen(species))
+                        SetState(species, ZukanState8b.Seen);
+                    var pi = pt[species];
+                    var m = !pi.OnlyFemale;
+                    var f = !pi.OnlyMale;
+                    SetGenderFlags(species, m, f, m && shinyToo, f && shinyToo);
+                }
+                else
+                {
+                    ClearDexEntryAll(species);
+                }
+            }
+        }
 
-		public override void SetDexEntryAll(int species, bool shinyToo = false)
-		{
-			SetState(species, ZukanState8b.Caught);
+        public override void SetDexEntryAll(int species, bool shinyToo = false)
+        {
+            SetState(species, ZukanState8b.Caught);
 
-			var pt = Personal;
-			var pi = pt[species];
-			var m = !pi.OnlyFemale;
-			var f = !pi.OnlyMale;
-			SetGenderFlags(species, m, f, m && shinyToo, f && shinyToo);
+            var pt = Personal;
+            var pi = pt[species];
+            var m = !pi.OnlyFemale;
+            var f = !pi.OnlyMale;
+            SetGenderFlags(species, m, f, m && shinyToo, f && shinyToo);
 
-			var formCount = GetFormCount(species);
-			if (formCount is not 0)
-			{
-				for (int form = 0; form < formCount; form++)
-				{
-					SetHasFormFlag(species, form, false, true);
-					if (shinyToo)
-						SetHasFormFlag(species, form, true, true);
-				}
-			}
+            var formCount = GetFormCount(species);
+            if (formCount is not 0)
+            {
+                for (int form = 0; form < formCount; form++)
+                {
+                    SetHasFormFlag(species, form, false, true);
+                    if (shinyToo)
+                        SetHasFormFlag(species, form, true, true);
+                }
+            }
 
-			SetLanguageFlags(species, LANGUAGE_ALL);
-		}
+            SetLanguageFlags(species, LANGUAGE_ALL);
+        }
 
-		public override void ClearDexEntryAll(int species)
-		{
-			SetState(species, ZukanState8b.None);
-			SetGenderFlags(species, false, false, false, false);
+        public override void ClearDexEntryAll(int species)
+        {
+            SetState(species, ZukanState8b.None);
+            SetGenderFlags(species, false, false, false, false);
 
-			var formCount = GetFormCount(species);
-			if (formCount is not 0)
-			{
-				for (int form = 0; form < formCount; form++)
-				{
-					SetHasFormFlag(species, form, false, false);
-					SetHasFormFlag(species, form, true, false);
-				}
-			}
+            var formCount = GetFormCount(species);
+            if (formCount is not 0)
+            {
+                for (int form = 0; form < formCount; form++)
+                {
+                    SetHasFormFlag(species, form, false, false);
+                    SetHasFormFlag(species, form, true, false);
+                }
+            }
 
-			SetLanguageFlags(species, LANGUAGE_NONE);
-		}
-	}
+            SetLanguageFlags(species, LANGUAGE_NONE);
+        }
+    }
 }

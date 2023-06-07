@@ -50,12 +50,12 @@ namespace PKHeX.Core
             return Offset + (trainer / 4);
         }
 
-		private void SetBit(ref byte bitFlag, byte bitIndex, bool bitValue)
-		{
-			bitFlag = (byte)(bitFlag & ~(0xF << bitIndex) | ((bitValue ? 1 : 0) << bitIndex));
-		}
+        private void SetBit(ref byte bitFlag, byte bitIndex, bool bitValue)
+        {
+            bitFlag = (byte)(bitFlag & ~(0xF << bitIndex) | ((bitValue ? 1 : 0) << bitIndex));
+        }
 
-		public bool GetIsWin(int trainer) => (Data[GetTrainerStructOffset(trainer)] >> (trainer % 4 * 2) & 1) == 1;
+        public bool GetIsWin(int trainer) => (Data[GetTrainerStructOffset(trainer)] >> (trainer % 4 * 2) & 1) == 1;
         public bool GetIsBattleSearcher(int trainer) => (Data[GetTrainerStructOffset(trainer)] >> (trainer % 4 * 2 + 1) & 1) == 1;
         public void SetIsWin(int trainer, bool value) => SetBit(ref Data[GetTrainerStructOffset(trainer)], (byte)(trainer % 4 * 2), value);
         public void SetIsBattleSearcher(int trainer, bool value) => SetBit(ref Data[GetTrainerStructOffset(trainer)], (byte)(trainer % 4 * 2 + 1), value);

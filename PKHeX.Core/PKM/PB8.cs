@@ -124,8 +124,8 @@ public class PB8 : G8PKM
     public override int MaxBallID => Legal.MaxBallID_8b;
     public override int MaxGameID => Legal.MaxGameID_8b;
 
-	public PB8LUMI ConvertToPB8LUMI()
-	{
-		return new PB8LUMI((byte[])Data.Clone());
-	}
+    public PB8LUMI ConvertToPB8LUMI()
+    {
+        return new PB8LUMI((byte[])Data.Clone());
+    }
 }

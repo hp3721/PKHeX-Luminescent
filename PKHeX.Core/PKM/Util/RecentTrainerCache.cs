@@ -10,9 +10,9 @@ public static class RecentTrainerCache
 {
     private static ITrainerInfo Trainer = new SimpleTrainerInfo();
     private static IRegionOrigin Trainer67 = new SimpleTrainerInfo(GameVersion.SN);
-	public static bool LumiTrainer = false;
+    public static bool LumiTrainer = false;
 
-	private static IRegionOrigin GetTrainer3DS(ITrainerInfo tr) => tr is IRegionOrigin r ? r : Trainer67;
+    private static IRegionOrigin GetTrainer3DS(ITrainerInfo tr) => tr is IRegionOrigin r ? r : Trainer67;
 
     /// <summary> Most recently loaded <see cref="ITrainerInfo.OT"/>. </summary>
     public static string OT_Name => Trainer.OT;
