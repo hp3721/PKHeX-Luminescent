@@ -316,7 +316,7 @@ namespace PKHeX.Core
             AddCountAcquired(pkm);
         }
 
-        private void AddCountAcquired(PKM pkm)
+        protected void AddCountAcquired(PKM pkm)
         {
             // There aren't many records, and they only track Capture/Fish/Hatch/Defeat.
             Records.AddRecord(pkm.WasEgg ? 004 : 002); // egg, capture

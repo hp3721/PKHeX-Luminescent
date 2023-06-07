@@ -8,29 +8,23 @@ namespace PKHeX.Core
     /// </summary>
     public enum Gem8LumiVersion
     {
-        /// <summary>
-        /// Initial cartridge version shipped (No Luminescent release).
-        /// </summary>
-        /// <remarks><see cref="SaveUtil.SIZE_G8BDSP"/></remarks>
-        V1_0 = 0x25, // 37
-
-        /// <summary>
-        /// Pre-release patch.
+	    /// <summary>
+        /// 1.1.0-Luminescent
         /// </summary>
         /// <remarks><see cref="SaveUtil.SIZE_G8BDSPLUMI_1"/></remarks>
         V1_1 = 0x2C, // 44
 
         /// <summary>
-        /// February patch (No Luminescent release).
-        /// </summary>
-        /// <remarks><see cref="SaveUtil.SIZE_G8BDSP_2"/></remarks>
-        V1_2 = 0x32, // 50
-
-        /// <summary>
-        /// March patch.
+        /// 1.3.0-Luminescent
         /// </summary>
         /// <remarks><see cref="SaveUtil.SIZE_G8BDSPLUMI_3"/></remarks>
         V1_3 = 0x34, // 52
+
+	    /// <summary>
+	    /// 1.3.0-Luminescent (Lumi Save Revision 1)
+	    /// </summary>
+	    /// <remarks><see cref="SaveUtil.SIZE_G8BDSPLUMI_3"/></remarks>
+	    V1_3rv1 = 0x0134
     }
 
     public static class Gem8LumiVersionExtensions
@@ -43,7 +37,8 @@ namespace PKHeX.Core
         {
             V1_1 => "-1.1.0", // 1.1.0-Luminescent
             V1_3 => "-1.3.0", // 1.3.0-Luminescent
-            _ => throw new ArgumentOutOfRangeException(nameof(version)),
+			V1_3rv1 => "-1.3.0 rev1", // 1.3.0-Luminescent (Lumi Save Revision 1)
+			_ => throw new ArgumentOutOfRangeException(nameof(version)),
         };
     }
 }

@@ -1,4 +1,6 @@
-﻿namespace PKHeX.Core;
+﻿using System.Security.Cryptography;
+
+namespace PKHeX.Core;
 
 /// <summary>
 /// Caches a reference to the most recently loaded trainer data.
@@ -8,8 +10,9 @@ public static class RecentTrainerCache
 {
     private static ITrainerInfo Trainer = new SimpleTrainerInfo();
     private static IRegionOrigin Trainer67 = new SimpleTrainerInfo(GameVersion.SN);
+	public static bool LumiTrainer = false;
 
-    private static IRegionOrigin GetTrainer3DS(ITrainerInfo tr) => tr is IRegionOrigin r ? r : Trainer67;
+	private static IRegionOrigin GetTrainer3DS(ITrainerInfo tr) => tr is IRegionOrigin r ? r : Trainer67;
 
     /// <summary> Most recently loaded <see cref="ITrainerInfo.OT"/>. </summary>
     public static string OT_Name => Trainer.OT;
@@ -33,6 +36,7 @@ public static class RecentTrainerCache
     public static void SetRecentTrainer(ITrainerInfo trainer)
     {
         Trainer = trainer;
+        LumiTrainer = trainer is SAV8BSLuminescent;
         if (trainer is IRegionOrigin g67)
             Trainer67 = g67;
     }

@@ -518,14 +518,8 @@ namespace PKHeX.Core
             if (data.Length is not (SIZE_G8BDSPLUMI_1 or SIZE_G8BDSPLUMI_3))
                 return Invalid;
 
-            /*
-            var ver = (Gem8LumiVersion)(ReadUInt32LittleEndian(data) ^ 0xFFFF0000);
-            if (ver is not (Gem8LumiVersion.V1_1 or Gem8LumiVersion.V1_3))
-                return Invalid;
-            */
-
             var ver = ReadUInt32LittleEndian(data);
-            if (ver != 0xFFFF0000)
+            if ((ver & 0xFFFF0000) != 0xFFFF0000) // Check if Lumi Save
                 return Invalid;
 
             return BDSPLUMI;

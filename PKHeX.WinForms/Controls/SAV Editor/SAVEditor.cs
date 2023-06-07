@@ -640,7 +640,8 @@ namespace PKHeX.WinForms.Controls
                 SAV7 s7 => new SAV_PokedexSM(s7),
                 SAV7b b7 => new SAV_PokedexGG(b7),
                 SAV8SWSH swsh => new SAV_PokedexSWSH(swsh),
-                SAV8BS bs => new SAV_PokedexBDSP(bs),
+				SAV8BSLuminescent bs => new SAV_PokedexBDSPLumi(bs),
+				SAV8BS bs => new SAV_PokedexBDSP(bs),
                 SAV8LA la => new SAV_PokedexLA(la),
                 _ => (Form?)null,
             };

@@ -258,7 +258,8 @@ namespace PKHeX.WinForms.Controls
             7 when pk is PB7 => (PopulateFieldsPB7, PreparePB7),
             8 when pk is PK8 => (PopulateFieldsPK8, PreparePK8),
             8 when pk is PA8 => (PopulateFieldsPA8, PreparePA8),
-            8 when pk is PB8 => (PopulateFieldsPB8, PreparePB8),
+			8 when pk is PB8LUMI => (PopulateFieldsPB8, PreparePB8),
+			8 when pk is PB8 => (PopulateFieldsPB8, PreparePB8),
             _ => throw new FormatException($"Unrecognized Type: {pk.GetType()}"),
         };
 
@@ -442,7 +443,7 @@ namespace PKHeX.WinForms.Controls
             CB_Form.Enabled = CB_Form.Visible = Label_Form.Visible = hasForms;
 
             if (HaX && Entity.Format >= 4)
-                Label_Form.Visible = true; // show with value entry textbox
+				Label_Form.Visible = true; // show with value entry textbox
 
             if (!hasForms)
             {

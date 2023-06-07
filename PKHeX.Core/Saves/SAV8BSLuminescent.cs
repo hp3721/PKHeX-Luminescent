@@ -25,7 +25,7 @@ namespace PKHeX.Core
             Played = new PlayTime8b(this, 0x79C04); // size: 0x04
             Contest = new Contest8b(this, 0x79C08); // size: 0x720
 
-            Zukan = new Zukan8b(this, 0x7A328); // size: 0x30B8
+            Zukan = (SaveRevision & 0x0100) == 0x0100 ? new Zukan8bLumi(this, 0x7A328) : new Zukan8b(this, 0x7A328); // size: 0x30B8
             BattleTrainer = new BattleTrainerStatus8bLumi(this, 0x7D3E0); // size: 0x1618
             MenuSelection = new MenuSelect8b(this, 0x7E9F8); // size: 0x44
             FieldObjects = new FieldObjectSave8b(this, 0x7EA3C); // size: 0x109A0 (1000 * 0x44)
@@ -74,7 +74,7 @@ namespace PKHeX.Core
         Initialize();
         }
 
-        public SAV8BSLuminescent() : this(new byte[SaveUtil.SIZE_G8BDSPLUMI_3], false) => SaveRevision = (int)Gem8LumiVersion.V1_3;
+        public SAV8BSLuminescent() : this(new byte[SaveUtil.SIZE_G8BDSPLUMI_3], false) => SaveRevision = (int)Gem8LumiVersion.V1_3rv1;
 
         private void Initialize()
         {
@@ -91,35 +91,32 @@ namespace PKHeX.Core
         protected override int SIZE_STORED => PokeCrypto.SIZE_8STORED;
         protected override int SIZE_PARTY => PokeCrypto.SIZE_8PARTY;
         public override int SIZE_BOXSLOT => PokeCrypto.SIZE_8PARTY;
-        public override PKM BlankPKM => new PB8();
-        public override Type PKMType => typeof(PB8);
+        public override PKM BlankPKM => new PB8LUMI();
+        public override Type PKMType => typeof(PB8LUMI);
 
         public override int BoxCount => BoxLayout8b.BoxCount;
         public override int MaxEV => 252;
 
         public override int Generation => 8;
-        public override PersonalTable Personal => PersonalTable.BDSP;
+        public override PersonalTable Personal => PersonalTable.BDSPLUMI;
         public override int OTLength => 12;
         public override int NickLength => 12;
         public override int MaxMoveID => Legal.MaxMoveID_8b;
-        public override int MaxSpeciesID => Legal.MaxSpeciesID_8b;
-        public override int MaxItemID => Legal.MaxItemID_8b;
+		public override int MaxSpeciesID => (int)Species.MAX_COUNT - 1;
+        public override int MaxItemID => 1835;
         public override int MaxBallID => Legal.MaxBallID_8b;
         public override int MaxGameID => Legal.MaxGameID_8b;
         public override int MaxAbilityID => Legal.MaxAbilityID_8b;
 
-        public new bool HasFirstSaveFileExpansion => (Gem8LumiVersion)SaveRevision >= Gem8LumiVersion.V1_1;
-        public new bool HasSecondSaveFileExpansion => (Gem8LumiVersion)SaveRevision >= Gem8LumiVersion.V1_2;
-
         public new int SaveRevision
         {
-            get => Data.Length switch
+            get => ReadUInt16LittleEndian(Data) switch
             {
-                SaveUtil.SIZE_G8BDSPLUMI_1 => (int)Gem8LumiVersion.V1_1, // 1.1.0-Luminescent
-                SaveUtil.SIZE_G8BDSPLUMI_3 => (int)Gem8LumiVersion.V1_3, // 1.3.0-Luminescent
-                _ => throw new ArgumentOutOfRangeException(nameof(Data.Length)),
+                0x00 when Data.Length == SaveUtil.SIZE_G8BDSPLUMI_1 => (int)Gem8LumiVersion.V1_1, // 1.1.0-Luminescent
+				0x00 or (int)Gem8LumiVersion.V1_3 when Data.Length == SaveUtil.SIZE_G8BDSPLUMI_3 => (int)Gem8LumiVersion.V1_3, // 1.3.0-Luminescent
+				_ => (int)Gem8LumiVersion.V1_3rv1,
             };
-            init => WriteUInt32LittleEndian(Data.AsSpan(0), 0xFFFF0000); //(value | 0xFFFF0000));
+            init => WriteUInt32LittleEndian(Data.AsSpan(0), (uint)(0xFFFF0000 | value));
         }
 
         public override string SaveRevisionString => ((Gem8LumiVersion)SaveRevision).GetSuffixString();
@@ -134,9 +131,11 @@ namespace PKHeX.Core
                 BoxLayout.LoadBattleTeams();
         }
 
-        #region Blocks
-        // public Box8 BoxInfo { get; }
-        public new FlagWork8b Work { get; }
+		protected override PKM GetPKM(byte[] data) => new PB8LUMI(data);
+
+		#region Blocks
+		// public Box8 BoxInfo { get; }
+		public new FlagWork8b Work { get; }
         public new MyItem8b Items { get; }
         public new UndergroundItemList8b Underground { get; }
         public new SaveItemShortcut8b SelectBoundItems { get; }
@@ -174,6 +173,17 @@ namespace PKHeX.Core
         // First Savedata Expansion!
         public new RecordAddData8b RecordAdd { get; }
         public new MysteryBlock8b MysteryRecords { get; }
-        #endregion
-    }
+		#endregion
+
+		protected override void SetPKM(PKM pkm, bool isParty = false)
+		{
+			var pk = (PB8LUMI)pkm;
+			// Apply to this Save File
+			DateTime Date = DateTime.Now;
+			pk.Trade(this, Date.Day, Date.Month, Date.Year);
+
+			pkm.RefreshChecksum();
+			AddCountAcquired(pkm);
+		}
+	}
 }

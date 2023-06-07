@@ -141,6 +141,7 @@ namespace PKHeX.Core
             }
             if (PLA == game) return Legal.MaxSpeciesID_8a;
             if (BDSP.Contains(game)) return Legal.MaxSpeciesID_8b;
+            if (BDSPLUMI == game) return (int)Species.MAX_COUNT - 1;
             if (Gen8.Contains(game)) return Legal.MaxSpeciesID_8;
             return -1;
         }
