@@ -137,6 +137,42 @@ namespace PKHeX.Core
             WriteInt32LittleEndian(SAV.Data.AsSpan(PokeDex + offset), value);
         }
 
+        public override void SeenNone()
+        {
+            for (int species = 1; species <= (uint)Species.MAX_COUNT - 1; species++)
+                ClearDexEntryAll(species);
+        }
+
+        public override void CaughtNone()
+        {
+            for (int species = 1; species <= (uint)Species.MAX_COUNT - 1; species++)
+            {
+                if (GetCaught(species))
+                    SetState(species, ZukanState8b.Seen);
+                SetLanguageFlags(species, 0);
+            }
+        }
+
+        public override void SeenAll(bool shinyToo = false)
+        {
+            var pt = Personal;
+            for (int i = 1; i <= (uint)Species.MAX_COUNT - 1; i++)
+            {
+                if (!GetSeen(i))
+                    SetState(i, ZukanState8b.Seen);
+                var pi = pt[i];
+                var m = !pi.OnlyFemale;
+                var f = !pi.OnlyMale;
+                SetGenderFlags(i, m, f, m && shinyToo, f && shinyToo);
+            }
+        }
+
+        public override void CompleteDex(bool shinyToo = false)
+        {
+            for (int species = 1; species <= (uint)Species.MAX_COUNT - 1; species++)
+                SetDexEntryAll(species, shinyToo);
+        }
+
         public override void CaughtAll(bool shinyToo = false)
         {
             var pt = Personal;
@@ -170,48 +206,6 @@ namespace PKHeX.Core
                     ClearDexEntryAll(species);
                 }
             }
-        }
-
-        public override void SetDexEntryAll(int species, bool shinyToo = false)
-        {
-            SetState(species, ZukanState8b.Caught);
-
-            var pt = Personal;
-            var pi = pt[species];
-            var m = !pi.OnlyFemale;
-            var f = !pi.OnlyMale;
-            SetGenderFlags(species, m, f, m && shinyToo, f && shinyToo);
-
-            var formCount = GetFormCount(species);
-            if (formCount is not 0)
-            {
-                for (int form = 0; form < formCount; form++)
-                {
-                    SetHasFormFlag(species, form, false, true);
-                    if (shinyToo)
-                        SetHasFormFlag(species, form, true, true);
-                }
-            }
-
-            SetLanguageFlags(species, LANGUAGE_ALL);
-        }
-
-        public override void ClearDexEntryAll(int species)
-        {
-            SetState(species, ZukanState8b.None);
-            SetGenderFlags(species, false, false, false, false);
-
-            var formCount = GetFormCount(species);
-            if (formCount is not 0)
-            {
-                for (int form = 0; form < formCount; form++)
-                {
-                    SetHasFormFlag(species, form, false, false);
-                    SetHasFormFlag(species, form, true, false);
-                }
-            }
-
-            SetLanguageFlags(species, LANGUAGE_NONE);
         }
     }
 }
